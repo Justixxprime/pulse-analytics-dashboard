@@ -1,0 +1,11 @@
+/* This is the ONLY file the Tailwind CLI reads as its starting point.
+   The three lines below are placeholders that the build step expands
+   into every Tailwind utility class your HTML actually uses (and only
+   those, which is why the compiled file is so much smaller than the
+   CDN build). Never edit the compiled output (css/tailwind.css) by
+   hand — it gets overwritten every time you run the build. Put any
+   hand-written CSS in css/style.css instead, which is untouched by
+   this process and loads right after this one. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

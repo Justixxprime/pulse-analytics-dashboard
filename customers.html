@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+<link rel="apple-touch-icon" href="images/icon-180.png">
+<link rel="apple-touch-icon" sizes="152x152" href="images/icon-152.png">
+<link rel="apple-touch-icon" sizes="167x167" href="images/icon-167.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="images/icon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/icon-16.png">
+<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#4F46E5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pulse">
+<meta name="format-detection" content="telephone=no">
+<script>(function(){var t=localStorage.getItem('pulse-theme');var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;var isDark=(t==='dark'||(t!=='light'&&d));if(isDark)document.documentElement.classList.add('dark');var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',isDark?'#0A0D18':'#F5F6FA')})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Customers | Pulse</title>
+<meta name="description" content="A searchable, sortable customer list with bulk actions.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Customers | Pulse">
+<meta property="og:description" content="A searchable, sortable customer list with bulk actions.">
+<meta property="og:site_name" content="Pulse">
+<meta name="author" content="Obioma Chibueze Justice">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Customers | Pulse">
+<meta name="twitter:description" content="A searchable, sortable customer list with bulk actions.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 28 28%22><rect width=%2228%22 height=%2228%22 rx=%227%22 fill=%22%234F46E5%22/><path d=%22M6 18l4-8 4 5 4-9 4 6%22 stroke=%22white%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          bg: "var(--bg)",
+          surface: "var(--surface)",
+          "surface-2": "var(--surface-2)",
+          border: "var(--border)",
+          text: "var(--text)",
+          "text-soft": "var(--text-soft)",
+          primary: "var(--primary)",
+          "primary-dark": "var(--primary-dark)",
+          success: "var(--success)",
+          danger: "var(--danger)",
+          teal: "var(--teal)",
+          pink: "var(--pink)",
+          amber: "var(--amber)",
+        },
+        fontFamily: {
+          display: ['"Sora"', "sans-serif"],
+          body: ['"Plus Jakarta Sans"', "sans-serif"],
+          mono: ['"JetBrains Mono"', "monospace"],
+        },
+      },
+    },
+  };
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="font-body text-text antialiased">
+<div class="flex min-h-screen">
+
+<aside class="hidden lg:flex flex-col w-64 shrink-0 border-r border-border bg-surface h-screen sticky top-0 p-4">
+        <a href="index.html" class="flex items-center gap-2 font-display font-bold text-lg px-2 mb-6 hover:opacity-75 transition-opacity" aria-label="Pulse home">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="var(--primary)"/><path d="M6 18l4-8 4 5 4-9 4 6" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Pulse
+    </a>
+    <nav class="flex-1 space-y-1 overflow-y-auto">
+      <a href="dashboard.html" class="sidebar-link "><i class="fa-solid fa-gauge w-4"></i>Dashboard</a>
+      <a href="orders.html" class="sidebar-link "><i class="fa-solid fa-receipt w-4"></i>Orders</a>
+      <a href="products.html" class="sidebar-link "><i class="fa-solid fa-box w-4"></i>Products</a>
+      <a href="customers.html" class="sidebar-link active"><i class="fa-solid fa-users w-4"></i>Customers</a>
+      <a href="content.html" class="sidebar-link "><i class="fa-solid fa-file-lines w-4"></i>Content</a>
+      <a href="store.html" class="sidebar-link "><i class="fa-solid fa-store w-4"></i>Online Store</a>
+      <p class="text-[10px] font-mono uppercase text-text-soft px-3 mt-4 mb-1">Insights</p>
+      <a href="analytics.html" class="sidebar-link "><i class="fa-solid fa-chart-line w-4"></i>Analytics</a>
+      <a href="reports.html" class="sidebar-link "><i class="fa-solid fa-wallet w-4"></i>Reports</a>
+      <a href="discounts.html" class="sidebar-link "><i class="fa-solid fa-tag w-4"></i>Discounts</a>
+      <p class="text-[10px] font-mono uppercase text-text-soft px-3 mt-4 mb-1">Account</p>
+      <a href="settings.html" class="sidebar-link "><i class="fa-solid fa-gear w-4"></i>Settings</a>
+      <a href="team.html" class="sidebar-link "><i class="fa-solid fa-user-group w-4"></i>Team</a>
+      <a href="index.html#faq" class="sidebar-link"><i class="fa-regular fa-circle-question w-4"></i>Help &amp; Support</a>
+    </nav>
+    <div class="rounded-xl p-4 mt-4" style="background:linear-gradient(160deg, var(--primary), var(--primary-dark))">
+      <p class="text-white font-display font-semibold text-sm">Upgrade to Premium</p>
+      <p class="text-white/80 text-xs mt-1">Unlock your account and all of its features.</p>
+      <a href="index.html#pricing" class="mt-3 block text-center bg-white text-primary text-xs font-semibold py-2 rounded-lg">Upgrade Premium</a>
+    </div>
+</aside>
+
+<div id="mobile-menu" data-open="false" class="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="absolute inset-0 bg-black/50" data-close-menu></div>
+  <div id="mobile-panel" class="absolute left-0 top-0 h-full w-72 bg-surface border-r border-border p-4 flex flex-col">
+    <div class="flex justify-end mb-2"><button data-close-menu class="h-8 w-8 flex items-center justify-center" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button></div>
+        <a href="index.html" class="flex items-center gap-2 font-display font-bold text-lg px-2 mb-6 hover:opacity-75 transition-opacity" aria-label="Pulse home">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="var(--primary)"/><path d="M6 18l4-8 4 5 4-9 4 6" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Pulse
+    </a>
+    <nav class="flex-1 space-y-1 overflow-y-auto">
+      <a href="dashboard.html" class="sidebar-link "><i class="fa-solid fa-gauge w-4"></i>Dashboard</a>
+      <a href="orders.html" class="sidebar-link "><i class="fa-solid fa-receipt w-4"></i>Orders</a>
+      <a href="products.html" class="sidebar-link "><i class="fa-solid fa-box w-4"></i>Products</a>
+      <a href="customers.html" class="sidebar-link active"><i class="fa-solid fa-users w-4"></i>Customers</a>
+      <a href="content.html" class="sidebar-link "><i class="fa-solid fa-file-lines w-4"></i>Content</a>
+      <a href="store.html" class="sidebar-link "><i class="fa-solid fa-store w-4"></i>Online Store</a>
+      <p class="text-[10px] font-mono uppercase text-text-soft px-3 mt-4 mb-1">Insights</p>
+      <a href="analytics.html" class="sidebar-link "><i class="fa-solid fa-chart-line w-4"></i>Analytics</a>
+      <a href="reports.html" class="sidebar-link "><i class="fa-solid fa-wallet w-4"></i>Reports</a>
+      <a href="discounts.html" class="sidebar-link "><i class="fa-solid fa-tag w-4"></i>Discounts</a>
+      <p class="text-[10px] font-mono uppercase text-text-soft px-3 mt-4 mb-1">Account</p>
+      <a href="settings.html" class="sidebar-link "><i class="fa-solid fa-gear w-4"></i>Settings</a>
+      <a href="team.html" class="sidebar-link "><i class="fa-solid fa-user-group w-4"></i>Team</a>
+      <a href="index.html#faq" class="sidebar-link"><i class="fa-regular fa-circle-question w-4"></i>Help &amp; Support</a>
+    </nav>
+    <div class="rounded-xl p-4 mt-4" style="background:linear-gradient(160deg, var(--primary), var(--primary-dark))">
+      <p class="text-white font-display font-semibold text-sm">Upgrade to Premium</p>
+      <p class="text-white/80 text-xs mt-1">Unlock your account and all of its features.</p>
+      <a href="index.html#pricing" class="mt-3 block text-center bg-white text-primary text-xs font-semibold py-2 rounded-lg">Upgrade Premium</a>
+    </div>
+</div>
+</div>
+
+<div class="flex-1 min-w-0">
+  <header class="sticky top-0 z-30 bg-bg/90 backdrop-blur border-b border-border">
+    <div class="px-4 sm:px-6 h-16 flex items-center gap-3">
+      <button id="hamburger-btn" class="hamburger lg:hidden flex flex-col justify-center gap-[5px] h-8 w-8 shrink-0" aria-label="Open menu" data-open="false">
+        <span class="block h-0.5 w-5 bg-text rounded"></span><span class="block h-0.5 w-5 bg-text rounded"></span><span class="block h-0.5 w-5 bg-text rounded"></span>
+      </button>
+      <a href="index.html" class="lg:hidden flex items-center gap-1.5 font-display font-bold text-sm shrink-0" aria-label="Pulse home">
+        <svg width="22" height="22" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="var(--primary)"/><path d="M6 18l4-8 4 5 4-9 4 6" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="hidden sm:inline">Pulse</span>
+      </a>
+      <div class="relative flex-1 max-w-sm min-w-0 hidden sm:block">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-text-soft text-xs"></i>
+        <input id="table-search" type="text" placeholder="Search customers…" class="w-full bg-surface border border-border rounded-full pl-9 pr-3 py-2 text-sm focus:border-primary outline-none">
+      </div>
+      <div class="ml-auto flex items-center gap-2 sm:gap-3">
+        <button id="cmdk-btn" class="hidden md:flex items-center gap-2 text-xs text-text-soft border border-border rounded-full px-3 py-1.5 hover:border-primary hover:text-primary" aria-haspopup="dialog">
+          <i class="fa-solid fa-magnifying-glass text-[10px]"></i>Jump to… <kbd>Ctrl</kbd><kbd>K</kbd>
+        </button>
+        <button id="cmdk-btn-mobile" class="md:hidden h-9 w-9 rounded-full border border-border flex items-center justify-center" aria-label="Open search">
+          <i class="fa-solid fa-magnifying-glass text-sm"></i>
+        </button>
+        <div class="relative">
+          <button id="notif-btn" class="relative h-9 w-9 rounded-full border border-border flex items-center justify-center hover:border-primary hover:text-primary" aria-label="Notifications" aria-haspopup="true">
+            <i class="fa-regular fa-bell text-sm"></i>
+            <span id="notif-badge" class="hidden absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-white text-[9px] font-bold flex items-center justify-center">0</span>
+          </button>
+          <div id="notif-panel" data-open="false" role="dialog" aria-modal="true" aria-label="Notifications" class="notif-panel absolute right-0 top-11 w-80 max-w-[85vw] card overflow-hidden z-40">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-border">
+              <p class="text-sm font-semibold">Notifications</p>
+              <div class="flex items-center gap-3">
+                <button id="notif-mark-read" class="text-xs text-primary font-semibold">Mark all read</button>
+                <button id="notif-clear-all" class="text-xs text-text-soft hover:text-danger font-semibold">Clear all</button>
+              </div>
+            </div>
+            <div id="notif-list" class="max-h-80 overflow-y-auto"></div>
+          </div>
+        </div>
+        <button class="theme-switch" data-theme-toggle aria-label="Toggle dark mode"><span class="knob"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></span></button>
+        <span class="relative h-9 w-9 rounded-xl bg-primary text-white text-xs font-semibold flex items-center justify-center shrink-0 overflow-hidden">
+          <img src="images/avatar.jpg" alt="Obioma Chibueze Justice" class="absolute inset-0 h-full w-full object-cover" onerror="this.style.display='none'">
+          <span class="relative">OJ</span>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="p-4 sm:p-6 relative overflow-hidden">
+    <div class="ambient-orb orb-a" style="width:320px;height:320px;top:-110px;right:-90px"></div>
+    <div class="ambient-orb orb-b" style="width:240px;height:240px;bottom:0;left:-70px"></div>
+    <div class="mb-6">
+      <p class="font-mono text-xs text-text-soft uppercase">People</p>
+      <h1 class="font-display font-bold text-2xl mt-1">Customers</h1>
+    </div>
+
+    <div id="skeleton-layer" class="card p-5">
+      <div class="h-6 w-40 skeleton mb-4"></div>
+      <div class="space-y-3">
+        <div class="h-12 skeleton"></div><div class="h-12 skeleton"></div><div class="h-12 skeleton"></div>
+        <div class="h-12 skeleton"></div><div class="h-12 skeleton"></div>
+      </div>
+    </div>
+
+    <div id="real-content" class="hidden card p-5" data-reveal>
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+        <p class="text-sm font-semibold">All customers <span class="text-text-soft font-normal">(<span id="customers-count">8</span>)</span></p>
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-[10px] text-text-soft hidden sm:inline">Click a column to sort</span>
+          <button id="export-btn" class="flex items-center gap-1.5 text-xs font-semibold border border-border rounded-full px-3 py-1.5 hover:border-primary hover:text-primary"><i class="fa-solid fa-arrow-up-from-bracket"></i>Export CSV</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead id="customers-thead">
+            <tr class="text-[11px] uppercase text-text-soft font-mono border-b border-border">
+              <th class="py-2 pr-2 w-8"><input type="checkbox" id="select-all" aria-label="Select all customers"></th>
+              <th class="py-2 pr-3 font-medium" data-sort="name">Customer</th>
+              <th class="py-2 pr-3 font-medium hidden sm:table-cell" data-sort="orders">Orders</th>
+              <th class="py-2 pr-3 font-medium" data-sort="spent">Total spent</th>
+              <th class="py-2 pr-3 font-medium" data-sort="status">Status</th>
+              <th class="py-2 pl-3 font-medium text-right sticky right-0 bg-surface shadow-[-8px_0_8px_-8px_rgba(0,0,0,0.35)]">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="customers-tbody"></tbody>
+        </table>
+        <p id="table-empty" class="hidden text-center text-sm text-text-soft py-10">No customers match your search.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="bulk-bar" data-open="false" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 card px-4 py-3 flex items-center gap-4">
+    <span class="text-sm"><span id="bulk-count" class="font-display font-bold">0</span> selected</span>
+    <button id="bulk-delete-btn" class="text-xs font-semibold text-danger flex items-center gap-1.5"><i class="fa-regular fa-trash-can"></i>Delete</button>
+    <button id="bulk-clear-btn" class="text-xs font-semibold text-text-soft">Clear</button>
+  </div>
+</div>
+</div>
+
+<div id="toast-wrap" aria-live="polite" aria-atomic="true" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 items-end"></div>
+<script src="js/site.js"></script>
+<script src="js/command-palette.js"></script>
+<script src="js/table-utils.js"></script>
+<script src="js/customers.js"></script>
+    <button
+      id="back-to-top"
+      data-visible="false"
+      aria-label="Back to top"
+      class="btn-pop fixed bottom-5 left-5 z-40 h-11 w-11 rounded-full bg-primary text-white flex items-center justify-center shadow-lg"
+    >
+      <i class="fa-solid fa-arrow-up text-sm"></i>
+    </button>
+
+</body>
+</html>

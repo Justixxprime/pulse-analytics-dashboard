@@ -1,0 +1,13 @@
+{
+  "name": "pulse-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pulse: a hand-built analytics dashboard UI, portfolio project.",
+  "scripts": {
+    "build:css": "tailwindcss -i ./css/input.css -o ./css/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./css/input.css -o ./css/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.13"
+  }
+}

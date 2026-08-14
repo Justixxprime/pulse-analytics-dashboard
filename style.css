@@ -1,0 +1,828 @@
+/* ==========================================================================
+   PULSE — analytics dashboard design system
+   Light = soft gray-white SaaS look. Dark = deep navy control-room look.
+   Same var-driven-Tailwind trick as Boardly: colors point at CSS vars so
+   toggling .dark on <html> repaints everything with no dark: classes.
+   ========================================================================== */
+
+:root{
+  --bg:#F5F6FA;
+  --surface:#FFFFFF;
+  --surface-2:#F0F1F6;
+  --border:#E6E8F0;
+  --text:#14162B;
+  --text-soft:#6B7086;
+  --primary:#4F46E5;
+  --primary-dark:#4338CA;
+  --primary-soft: rgba(79,70,229,.12);
+  --success:#16A34A;
+  --success-soft: rgba(22,163,74,.12);
+  --danger:#DC2626;
+  --danger-soft: rgba(220,38,38,.12);
+  --teal:#0EA5A5;
+  --pink:#EC4899;
+  --amber:#D97706;
+  --shadow: 0 1px 2px rgba(20,22,43,.04), 0 8px 24px -10px rgba(20,22,43,.10);
+  --shadow-lg: 0 24px 60px -20px rgba(20,22,43,.28);
+}
+
+html.dark{
+  --bg:#0A0D18;
+  --surface:#121628;
+  --surface-2:#171C31;
+  --border:#232A45;
+  --text:#EEF0FA;
+  --text-soft:#8D93B0;
+  --primary:#6D64FF;
+  --primary-dark:#8781FF;
+  --primary-soft: rgba(109,100,255,.18);
+  --success:#34D399;
+  --success-soft: rgba(52,211,153,.15);
+  --danger:#F87171;
+  --danger-soft: rgba(248,113,113,.15);
+  --teal:#2DD4D4;
+  --pink:#F472B6;
+  --amber:#FBBF24;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -10px rgba(0,0,0,.55);
+  --shadow-lg: 0 24px 70px -20px rgba(0,0,0,.7);
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; overflow-x:clip; }
+body{ max-width:100%; }
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Plus Jakarta Sans', sans-serif;
+  transition: background-color .3s ease, color .3s ease;
+}
+.font-display{ font-family:'Sora', sans-serif; letter-spacing:-0.01em; }
+.font-mono{ font-family:'JetBrains Mono', monospace; }
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  transition: background-color .3s ease, border-color .3s ease, transform .2s ease, box-shadow .2s ease;
+}
+.card-hover{ transform-style:preserve-3d; }
+.card-hover:hover{ transform:translateY(-5px) rotateX(2.5deg) rotateY(-2.5deg) scale(1.01); box-shadow:var(--shadow-lg); }
+
+.badge-up{ color:var(--success); background:var(--success-soft); }
+.badge-down{ color:var(--danger); background:var(--danger-soft); }
+
+/* ---- sidebar ---- */
+.sidebar-link{
+  display:flex; align-items:center; gap:.65rem;
+  padding:.6rem .85rem; border-radius:10px;
+  color:var(--text-soft); font-size:.875rem; font-weight:500;
+  transition: background-color .15s ease, color .15s ease;
+  position:relative;
+}
+.sidebar-link:hover{ background:var(--surface-2); color:var(--text); }
+.sidebar-link.active{ background:var(--primary-soft); color:var(--primary); }
+.sidebar-link .soon{
+  margin-left:auto; font-size:9px; font-family:'JetBrains Mono',monospace;
+  text-transform:uppercase; color:var(--text-soft); border:1px solid var(--border); border-radius:999px; padding:1px 6px;
+}
+
+/* ---- theme switch ---- */
+.theme-switch{
+  --w:48px; --h:26px; width:var(--w); height:var(--h); border-radius:999px;
+  background:var(--surface-2); position:relative; cursor:pointer; border:1px solid var(--border); flex-shrink:0;
+}
+.theme-switch .knob{
+  position:absolute; top:2px; left:2px; height:calc(var(--h) - 6px); width:calc(var(--h) - 6px);
+  border-radius:999px; background:var(--primary); display:flex; align-items:center; justify-content:center;
+  font-size:9px; color:#fff; transition: transform .3s cubic-bezier(.5,-0.2,.3,1.4);
+}
+html.dark .theme-switch .knob{ transform: translateX(calc(var(--w) - var(--h))); }
+.theme-switch .icon-moon{ display:none; }
+html.dark .theme-switch .icon-sun{ display:none; }
+html.dark .theme-switch .icon-moon{ display:inline; }
+
+/* ---- skeleton ---- */
+.skeleton{
+  background: linear-gradient(100deg, var(--surface-2) 30%, color-mix(in srgb, var(--border) 70%, white) 50%, var(--surface-2) 70%);
+  background-size: 250% 100%;
+  animation: sk 1.15s ease-in-out infinite;
+  border-radius:8px;
+}
+html.dark .skeleton{
+  background: linear-gradient(100deg, var(--surface-2) 30%, color-mix(in srgb, var(--border) 65%, white 12%) 50%, var(--surface-2) 70%);
+  background-size: 250% 100%;
+}
+@keyframes sk{ 0%{background-position:150% 50%;} 100%{background-position:-50% 50%;} }
+
+/* ---- bar chart animation ---- */
+.bar-fill{
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform .8s cubic-bezier(.2,.8,.2,1);
+}
+.bars-ready .bar-fill{ transform: scaleY(1); }
+
+/* ---- line chart draw-in ---- */
+.line-path{
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 1.1s cubic-bezier(.3,.7,.2,1), opacity .25s ease;
+}
+.line-ready .line-path{ stroke-dashoffset: 0; }
+.line-dot{ opacity:0; transition: opacity .3s ease; }
+.line-ready .line-dot{ opacity:1; transition-delay: 1s; }
+.line-area{ opacity:0; transition: opacity .8s ease; transition-delay:.4s; }
+
+/* ---- clickable chart legend (toggles a series on/off) ---- */
+.legend-item{
+  background:none; border:none; font: inherit; color: inherit;
+  cursor:pointer; border-radius:6px; padding-left:.25rem; padding-right:.25rem;
+  transition: opacity .2s ease, background-color .15s ease;
+}
+.legend-item:hover{ background: var(--surface-2); }
+.legend-item-off{ opacity:.4; text-decoration: line-through; }
+.line-ready .line-area{ opacity:1; }
+
+/* ---- donut ---- */
+.donut-ring{
+  stroke-dasharray: 340;
+  stroke-dashoffset: 340;
+  transition: stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1);
+}
+.donut-ready .donut-ring{ stroke-dashoffset: var(--donut-offset, 340); }
+
+/* ---- charts feel "alive": gentle idle motion once drawn in, not just a
+   one-time entrance ---- */
+.bar-fill{ transition: transform .8s cubic-bezier(.2,.8,.2,1), filter .2s ease, box-shadow .2s ease; }
+.bar-fill:hover{ filter:brightness(1.12); box-shadow:0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent); }
+.line-ready .line-dot{ animation: dot-pulse 2.4s ease-in-out infinite; animation-delay:1.1s; transform-box: fill-box; transform-origin: center; }
+@keyframes dot-pulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.35); } }
+.line-ready .line-path{ filter: drop-shadow(0 0 5px color-mix(in srgb, var(--primary) 35%, transparent)); }
+.donut-ready .donut-ring{ animation: donut-glow 3s ease-in-out .8s infinite; }
+@keyframes donut-glow{ 0%,100%{ filter:drop-shadow(0 0 0px transparent); } 50%{ filter:drop-shadow(0 0 7px color-mix(in srgb, var(--primary) 45%, transparent)); } }
+
+/* ---- widgets added live from the "Add widget" panel ---- */
+.widget-pop-in{ animation: widget-in .5s cubic-bezier(.2,.9,.25,1.15) both; }
+.widget-pop-out{ animation: widget-out .2s ease-in both; }
+@keyframes widget-in{ from{ opacity:0; transform:perspective(800px) translateY(18px) rotateX(10deg) scale(.92); } to{ opacity:1; transform:perspective(800px) translateY(0) rotateX(0) scale(1); } }
+@keyframes widget-out{ to{ opacity:0; transform:scale(.9); } }
+.widget-card{ transition: box-shadow .2s ease; }
+.drag-handle{ touch-action: none; }
+.widget-dragging{ opacity:.5; box-shadow:0 12px 30px -8px color-mix(in srgb, var(--primary) 45%, transparent), 0 0 0 2px var(--primary) !important; cursor:grabbing; transform:scale(1.02) rotate(-1deg) !important; z-index:20; position:relative; }
+#added-widgets:empty{ margin:0; }
+
+/* ---- dragging a widget card out of the "Add widget" panel to drop it
+   onto the dashboard: a small pill follows the pointer, and turns
+   primary-colored once you're over a valid drop area (outside the
+   panel itself) ---- */
+.widget-panel-dragging{ cursor:grabbing; user-select:none; }
+.panel-drag-handle{ touch-action:none; padding:.25rem; margin:-.25rem; }
+.widget-drag-ghost{
+  position:fixed; top:0; left:0; z-index:100; pointer-events:none;
+  transform:translate(-50%, -130%);
+  background:var(--surface); color:var(--text); border:1px solid var(--border);
+  box-shadow:var(--shadow-lg); border-radius:999px; padding:.5rem .9rem;
+  font-size:.75rem; font-weight:600; display:flex; align-items:center; gap:.4rem;
+  transition: background .15s ease, color .15s ease, transform .1s ease;
+}
+.widget-drag-ghost-armed{ background:var(--primary); color:#fff; border-color:var(--primary); transform:translate(-50%, -130%) scale(1.08); }
+
+.widget-drop-zone{
+  position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+  z-index:99; width:min(92vw, 420px); padding:1rem 1.25rem; text-align:center;
+  border-radius:16px; border:2px dashed color-mix(in srgb, var(--primary) 40%, transparent);
+  background:color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter:blur(6px);
+  font-size:.8rem; font-weight:600; color:var(--text-soft);
+  display:flex; align-items:center; justify-content:center; gap:.5rem;
+  animation: drop-zone-in .25s cubic-bezier(.2,.8,.2,1) both;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
+}
+.widget-drop-zone-armed{ border-style:solid; border-color:var(--primary); background:var(--primary); color:#fff; transform:translateX(-50%) scale(1.03); }
+@keyframes drop-zone-in{ from{ opacity:0; transform:translateX(-50%) translateY(12px); } to{ opacity:1; transform:translateX(-50%) translateY(0); } }
+
+/* ---- magnetic buttons: JS (site.js, initMagnetic) writes --mx/--my as the
+   pointer moves near the button; this just reads them. Resets to 0,0 on
+   pointer leave so it springs back to center. ---- */
+.magnetic{
+  transform: translate(var(--mx, 0px), var(--my, 0px));
+  transition: transform .25s cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+}
+
+/* ---- tap/press feedback: any button-like element compresses slightly on
+   press, the "this responded to me" cue every native app has and most
+   web buttons skip ---- */
+.btn-pop:active, .magnetic:active, button:not(:disabled):active{
+  transform: scale(.96);
+}
+.magnetic:active{ transition-duration: .08s; }
+
+/* ---- animated gradient text for the hero headline: a slow, subtle hue
+   drift, not a loud rainbow — reads as "alive" without fighting for
+   attention against everything else on the page ---- */
+.gradient-text-live{
+  background: linear-gradient(90deg, var(--primary), var(--teal), var(--pink), var(--primary));
+  background-size: 300% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: gradient-drift 8s ease-in-out infinite;
+}
+@keyframes gradient-drift{ 0%,100%{ background-position: 0% 50%; } 50%{ background-position: 100% 50%; } }
+
+/* ---- top-of-page loading bar during navigation, synced to the native
+   page transition (see initNavProgress in site.js) ---- */
+#nav-progress{
+  position:fixed; top:0; left:0; height:3px; z-index:200;
+  background:linear-gradient(90deg, var(--primary), var(--teal));
+  width:0%; opacity:0;
+  transition: width .3s ease, opacity .2s ease;
+}
+#nav-progress.nav-progress-active{ opacity:1; }
+
+@media (prefers-reduced-motion: reduce){
+  .gradient-text-live{ animation:none; }
+  .magnetic{ transition:none; transform:none !important; }
+  .row-enter{ animation:none !important; opacity:1 !important; transform:none !important; }
+  #nav-progress{ transition:none; }
+}
+
+/* ---- table row entrance stagger: rows fade/slide in one after another
+   instead of all appearing at once (see revealRows in table-utils.js) ---- */
+.row-enter{ animation: row-in .35s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes row-in{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+
+/* ---- table row hover reveal ---- */
+.row-actions{ opacity:0; transform:translateX(4px); transition: opacity .15s ease, transform .15s ease; }
+tr:hover .row-actions{ opacity:1; transform:translateX(0); }
+tr.table-row{ transition: background-color .15s ease; }
+tr.table-row:hover{ background:var(--surface-2); }
+
+/* ---- scroll reveal (marketing page) ---- */
+[data-reveal]{ opacity:0; transform:perspective(900px) translateY(22px) rotateX(8deg) scale(.98); transform-origin:center bottom; transition: opacity .7s cubic-bezier(.16,.8,.24,1), transform .7s cubic-bezier(.16,.8,.24,1); will-change:transform, opacity; }
+[data-reveal].is-visible{ opacity:1; transform:perspective(900px) translateY(0) rotateX(0deg) scale(1); }
+[data-reveal-delay="1"]{ transition-delay:.08s; }
+[data-reveal-delay="2"]{ transition-delay:.16s; }
+[data-reveal-delay="3"]{ transition-delay:.24s; }
+
+/* ---- mobile sidebar drawer ---- */
+#mobile-menu{ transition: opacity .25s ease, visibility .25s ease; overflow:hidden; }
+#mobile-menu[data-open="false"]{ opacity:0; visibility:hidden; pointer-events:none; }
+#mobile-menu[data-open="true"]{ opacity:1; visibility:visible; }
+#mobile-panel{ transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+#mobile-menu[data-open="false"] #mobile-panel{ transform: translateX(-100%); }
+#mobile-menu[data-open="true"] #mobile-panel{ transform: translateX(0); }
+.hamburger span{ transition: transform .3s ease, opacity .3s ease; transform-origin:center; }
+.hamburger[data-open="true"] span:nth-child(1){ transform: translateY(6px) rotate(45deg); }
+.hamburger[data-open="true"] span:nth-child(2){ opacity:0; }
+.hamburger[data-open="true"] span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
+
+/* ---- widget panel (slide-over) ---- */
+#widget-panel{ transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+#widget-overlay[data-open="false"] #widget-panel{ transform: translateX(110%); }
+#widget-overlay[data-open="true"] #widget-panel{ transform: translateX(0); }
+#widget-overlay{ transition: opacity .25s ease, visibility .25s ease; overflow:hidden; }
+#widget-overlay[data-open="false"]{ opacity:0; visibility:hidden; pointer-events:none; }
+#widget-overlay[data-open="true"]{ opacity:1; visibility:visible; }
+
+/* ---- row detail panel (slide-over, shared by orders/customers/products/dashboard) ---- */
+#detail-panel{ transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+#detail-overlay[data-open="false"] #detail-panel{ transform: translateX(110%); }
+#detail-overlay[data-open="true"] #detail-panel{ transform: translateX(0); }
+#detail-overlay{ transition: opacity .25s ease, visibility .25s ease; overflow:hidden; }
+#detail-overlay[data-open="false"]{ opacity:0; visibility:hidden; pointer-events:none; }
+#detail-overlay[data-open="true"]{ opacity:1; visibility:visible; }
+
+#edit-panel{ transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+#edit-overlay[data-open="false"] #edit-panel{ transform: translateX(110%); }
+#edit-overlay[data-open="true"] #edit-panel{ transform: translateX(0); }
+#edit-overlay{ transition: opacity .25s ease, visibility .25s ease; overflow:hidden; }
+#edit-overlay[data-open="false"]{ opacity:0; visibility:hidden; pointer-events:none; }
+#edit-overlay[data-open="true"]{ opacity:1; visibility:visible; }
+
+/* ---- toast ---- */
+.toast{ animation: toast-in .3s cubic-bezier(.2,.8,.2,1); }
+@keyframes toast-in{ from{ transform:translateY(10px); opacity:0;} to{ transform:translateY(0); opacity:1;} }
+
+@keyframes field-shake{ 10%,90%{transform:translateX(-1px);} 20%,80%{transform:translateX(2px);} 30%,50%,70%{transform:translateX(-4px);} 40%,60%{transform:translateX(4px);} }
+.field-shake{ animation: field-shake .4s ease; }
+.input-error{ border-color: var(--danger) !important; }
+@media (prefers-reduced-motion: reduce){ .field-shake{ animation:none; } }
+
+/* Smooth momentum scroll for horizontally-scrollable tables on iOS, so a
+   table wider than its card actually swipes nicely instead of feeling stuck. */
+.overflow-x-auto{ -webkit-overflow-scrolling: touch; }
+
+/* iOS Safari auto-zooms the whole page on focus for any text input under
+   16px — the site's inputs use text-sm (14px), which triggers it. Forcing
+   16px on phones only (desktop keeps the smaller, tighter look) stops the
+   zoom without changing how anything looks above phone width. */
+@media (max-width: 640px){
+  input, select, textarea{ font-size:16px !important; }
+}
+
+/* ---- notification dropdown ---- */
+.notif-panel{
+  transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+  transform-origin: top right;
+  max-width: min(20rem, calc(100vw - 2rem));
+}
+.notif-panel[data-open="false"]{ opacity:0; visibility:hidden; transform: scale(.97) translateY(-4px); pointer-events:none; }
+.notif-panel[data-open="true"]{ opacity:1; visibility:visible; transform: scale(1) translateY(0); }
+
+/* On phone-width screens, "right:0 absolute" is anchored to the tiny
+   bell-button wrapper, not the screen edge — since the theme switch and
+   avatar sit further right in the header, that anchor point isn't near
+   the true right edge, so a 320px-wide panel runs off the LEFT edge of
+   the viewport (this is the iPhone 13 cut-off bug). Fixed positioning
+   anchored to the viewport itself guarantees it always stays on-screen,
+   regardless of where the bell button happens to sit in the header. */
+@media (max-width: 640px){
+  #notif-panel.notif-panel{
+    position: fixed;
+    top: 4rem;
+    right: .75rem;
+    left: .75rem;
+    width: auto;
+    max-width: none;
+    transform-origin: top center;
+  }
+  #notif-panel.notif-panel[data-open="false"]{ transform: scale(.97) translateY(-6px); }
+  #notif-panel.notif-panel[data-open="true"]{ transform: scale(1) translateY(0); }
+}
+
+/* ---- 3-way theme segmented control (Settings page) ---- */
+.theme-seg{ display:inline-flex; background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:3px; gap:2px; }
+.theme-seg button{ padding:.4rem .75rem; border-radius:7px; font-size:.75rem; font-weight:600; color:var(--text-soft); display:flex; align-items:center; gap:.4rem; transition: background-color .15s ease, color .15s ease; }
+.theme-seg button.is-active{ background:var(--surface); color:var(--text); box-shadow:var(--shadow); }
+
+/* ---- bulk action bar ---- */
+#bulk-bar{ transition: transform .25s cubic-bezier(.2,.8,.2,1), opacity .25s ease; }
+#bulk-bar[data-open="false"]{ transform: translateY(120%); opacity:0; pointer-events:none; }
+#bulk-bar[data-open="true"]{ transform: translateY(0); opacity:1; }
+
+/* ---- sortable column headers ---- */
+th[data-sort]{ cursor:pointer; user-select:none; }
+th[data-sort]:hover{ color:var(--text); }
+th[data-sort] .sort-icon{ opacity:.35; margin-left:3px; font-size:9px; }
+th[data-sort].sort-active .sort-icon{ opacity:1; color:var(--primary); }
+th[data-sort]{ cursor:pointer; user-select:none; }
+.sort-priority{ font-size:9px; color:var(--primary); margin-left:2px; font-weight:700; }
+
+/* ---- heatmap ---- */
+.heatmap-cell{ width:11px; height:11px; border-radius:2px; background:var(--surface-2); transition: background-color .3s ease, transform .15s ease; }
+.heatmap-cell:hover{ transform: scale(1.3); }
+
+/* ---- command palette ---- */
+.cmdk-backdrop{ backdrop-filter: blur(3px); background: color-mix(in srgb, var(--text) 45%, transparent); }
+#cmdk[data-open="false"]{ opacity:0; visibility:hidden; pointer-events:none; }
+#cmdk[data-open="true"]{ opacity:1; visibility:visible; }
+#cmdk{ transition: opacity .2s ease, visibility .2s ease; }
+.cmdk-item.is-highlighted{ background:var(--surface-2); }
+
+/* ---- keyboard shortcuts sheet (press "?") ---- */
+#shortcuts-sheet[data-open="false"]{ opacity:0; visibility:hidden; pointer-events:none; }
+#shortcuts-sheet[data-open="true"]{ opacity:1; visibility:visible; }
+#shortcuts-sheet{ transition: opacity .2s ease, visibility .2s ease; }
+.btn-pop{ transition: transform .18s cubic-bezier(.3,1.5,.5,1), box-shadow .18s ease, background-color .2s ease; }
+.btn-pop:hover{ transform: translateY(-2px) scale(1.01); }
+.btn-pop:active{ transform: translateY(0) scale(.98); }
+kbd{ font-family:'JetBrains Mono',monospace; font-size:11px; background:var(--surface-2); border:1px solid var(--border); border-bottom-width:2px; border-radius:5px; padding:1px 5px; color:var(--text-soft); }
+
+a:focus-visible, button:focus-visible, input:focus-visible{ outline:2px solid var(--primary); outline-offset:2px; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  [data-reveal]{ opacity:1 !important; transform:none !important; }
+}
+
+::-webkit-scrollbar{ width:9px; height:9px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{ background:var(--border); border-radius:6px; }
+
+@keyframes float{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-10px);} }
+.float{ animation: float 5s ease-in-out infinite; }
+
+/* ==========================================================================
+   3D / cinematic layer (new revision)
+   Everything below is additive: existing selectors above are untouched, so
+   nothing that already worked can regress. See GUIDE.md section "12" for
+   the full explanation of how each piece works.
+   ========================================================================== */
+
+/* ---- ambient background orbs: soft blurred gradient blobs used behind
+   the hero and behind every app page's <main>, always clipped and always
+   z-indexed below real content so they read as depth, not decoration in
+   the way ---- */
+.ambient-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(70px);
+  pointer-events:none;
+  z-index:-1;
+  opacity:.5;
+  will-change:transform;
+}
+html.dark .ambient-orb{ opacity:.35; }
+.orb-a{ background:radial-gradient(circle, var(--primary), transparent 70%); animation: orbit-a 16s ease-in-out infinite; }
+.orb-b{ background:radial-gradient(circle, var(--teal), transparent 70%); animation: orbit-b 20s ease-in-out infinite; }
+.orb-c{ background:radial-gradient(circle, var(--pink), transparent 70%); animation: orbit-a 24s ease-in-out infinite reverse; }
+@keyframes orbit-a{ 0%,100%{ transform:translate(0, var(--py, 0px)) scale(1);} 50%{ transform:translate(30px, calc(-24px + var(--py, 0px))) scale(1.08);} }
+@keyframes orbit-b{ 0%,100%{ transform:translate(0, var(--py, 0px)) scale(1);} 50%{ transform:translate(-24px, calc(26px + var(--py, 0px))) scale(1.06);} }
+
+/* ---- 3D tilt: a container gets perspective, the child inside it rotates
+   on mousemove via a couple of inline custom properties (--rx/--ry) that
+   site.js writes on `pointermove`; CSS just reads them, so the JS stays
+   tiny and the "feel" is entirely tunable from here ---- */
+.tilt-wrap{ perspective:1200px; }
+.tilt-el{
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+  transition: transform .5s cubic-bezier(.2,.8,.2,1);
+  transform-style: preserve-3d;
+}
+.tilt-wrap:hover .tilt-el{ transition: transform .08s linear; }
+.tilt-layer-1{ transform: translateZ(40px); }
+.tilt-layer-2{ transform: translateZ(70px); }
+
+/* ---- hero scroll-scrub: lives on the OUTER wrapper (not .tilt-el) so it
+   never fights the pointer-tilt's own transition — two independent
+   transform layers that simply compose visually, parent then child. No
+   transition here on purpose: scroll-linked motion needs to track the
+   scrollbar exactly, a spring/ease here would make it visibly lag. ---- */
+.hero-scrub{
+  transform: rotateX(var(--scroll-rx, 0deg)) scale(var(--scroll-scale, 1));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ---- custom chart tooltip: one shared element repositioned on the fly
+   (see initChartTooltip in site.js), replacing the browser's native
+   `title` tooltip which is slow to appear and can't be styled ---- */
+#chart-tooltip{
+  position:fixed; top:0; left:0; z-index:150; pointer-events:none;
+  transform:translate(-50%, calc(-100% - 12px));
+  background:var(--text); color:var(--bg);
+  font-size:.7rem; font-weight:600; font-family:'JetBrains Mono', monospace;
+  padding:.35rem .6rem; border-radius:8px; white-space:nowrap;
+  opacity:0; transition: opacity .12s ease;
+  box-shadow:var(--shadow-lg);
+}
+#chart-tooltip.chart-tooltip-visible{ opacity:1; }
+
+/* ---- floating device / phone mockup frame used as an image placeholder
+   on the marketing page: a hand-drawn CSS phone shell so a real screenshot
+   (images/phone-preview.png) can be dropped in later with zero markup
+   changes, exactly like images/avatar.jpg already works ---- */
+.phone-frame{
+  width:170px; aspect-ratio:9/19.5;
+  background:linear-gradient(160deg, var(--text), color-mix(in srgb, var(--text) 70%, var(--primary)));
+  border-radius:30px; padding:9px;
+  box-shadow: var(--shadow-lg), 0 0 0 2px color-mix(in srgb, var(--text) 15%, transparent);
+}
+@media (min-width:1024px){ .phone-frame{ width:210px; border-radius:34px; padding:10px; } }
+html.dark .phone-frame{ background:linear-gradient(160deg, #1c2140, #0c0f1e); }
+.phone-screen{
+  position:relative; width:100%; height:100%; border-radius:24px; overflow:hidden;
+  background:var(--surface); border:1px solid rgba(255,255,255,.08);
+}
+.phone-notch{
+  position:absolute; top:8px; left:50%; transform:translateX(-50%);
+  width:70px; height:16px; border-radius:999px; background:var(--text);
+  z-index:2; opacity:.9;
+}
+.phone-placeholder-icon{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  color:var(--text-soft); font-size:22px; background:var(--surface-2);
+}
+
+/* ---- laptop / browser mockup gets the same tilt treatment plus a soft
+   drop shadow that deepens on hover, so it reads as sitting slightly off
+   the page rather than flat against it ---- */
+.mockup-shadow{ box-shadow: var(--shadow-lg); }
+
+/* ---- floating stat chips scattered around the hero mockup for a more
+   "cinematic" feel: small cards that idle-float and lift on hover ---- */
+.float-chip{
+  animation: float 6s ease-in-out infinite;
+  box-shadow: var(--shadow-lg);
+}
+.float-chip.delay-1{ animation-delay: -1.5s; }
+.float-chip.delay-2{ animation-delay: -3.2s; }
+
+/* ---- AI Assistant orb: pure CSS/gradient sphere, no image, pulses gently
+   so the widget reads as "listening" even before you type anything ---- */
+.ai-orb{
+  width:64px; height:64px; border-radius:50%;
+  background: radial-gradient(circle at 32% 28%, #A5B4FC, var(--primary) 55%, var(--primary-dark) 100%);
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--primary) 12%, transparent), 0 14px 30px -8px color-mix(in srgb, var(--primary) 55%, transparent);
+  animation: ai-pulse 2.6s ease-in-out infinite;
+}
+@keyframes ai-pulse{
+  0%,100%{ transform:scale(1); box-shadow:0 0 0 8px color-mix(in srgb, var(--primary) 12%, transparent), 0 14px 30px -8px color-mix(in srgb, var(--primary) 55%, transparent);}
+  50%{ transform:scale(1.06); box-shadow:0 0 0 14px color-mix(in srgb, var(--primary) 8%, transparent), 0 18px 34px -6px color-mix(in srgb, var(--primary) 60%, transparent);}
+}
+
+/* ---- back to top ---- */
+#back-to-top{
+  transition: opacity .25s ease, transform .25s ease, visibility .25s ease;
+}
+#back-to-top[data-visible="false"]{ opacity:0; visibility:hidden; transform:translateY(8px); pointer-events:none; }
+#back-to-top[data-visible="true"]{ opacity:1; visibility:visible; transform:translateY(0); }
+
+@media (prefers-reduced-motion: reduce){
+  .ambient-orb, .ai-orb, .float-chip{ animation:none !important; }
+  .tilt-el{ transform:none !important; }
+  .line-dot, .donut-ready .donut-ring{ animation:none !important; }
+  .widget-pop-in, .widget-pop-out{ animation-duration:.01s !important; }
+}
+
+/* ==========================================================================
+   World-class pass: page transitions, cursor spotlight, custom scrollbar,
+   selection color, film grain. All additive, all with safe fallbacks —
+   see GUIDE.md Section 14 for the full explanation of each one.
+   ========================================================================== */
+
+/* Smooth crossfade between full page loads (Dashboard -> Orders, etc.)
+   instead of the default hard white flash. One CSS rule, native browser
+   feature, silently ignored by browsers that don't support it yet. */
+@view-transition { navigation: auto; }
+
+/* Cross-document navigation (Dashboard -> Orders, etc.) gets its own
+   cinematic fade+scale, distinct from the browser's flat default
+   crossfade. The theme toggle drives a *different* circular-reveal
+   animation via JS (site.js) on the same pseudo-elements, so right
+   before it starts a transition it stamps data-view-transition-kind
+   on <html> — the override below only cancels this fade for that one
+   case, instead of the old approach which killed the animation for
+   every transition, including plain page navigation. */
+::view-transition-old(root){ animation: cinematic-page-out .4s cubic-bezier(.4,0,.2,1) both; }
+::view-transition-new(root){ animation: cinematic-page-in .45s cubic-bezier(.16,.8,.24,1) both; }
+@keyframes cinematic-page-out{ to{ opacity:0; transform:scale(.985); } }
+@keyframes cinematic-page-in{ from{ opacity:0; transform:scale(1.015); } to{ opacity:1; transform:scale(1); } }
+html[data-view-transition-kind="theme"]::view-transition-old(root),
+html[data-view-transition-kind="theme"]::view-transition-new(root){ animation:none; mix-blend-mode:normal; }
+@media (prefers-reduced-motion: reduce){
+  ::view-transition-old(root), ::view-transition-new(root){ animation:none !important; }
+}
+/* The new state must always sit ON TOP so the growing clip-path circle
+   reveals it over the old one — this has to hold for BOTH directions
+   (light→dark and dark→light). It used to be conditioned on html.dark,
+   which only worked one way: since the class already reflects the new
+   state by the time these match, the "not dark" branch put the OLD
+   screenshot on top, completely hiding the circle reveal on the dark→light
+   switch. Unconditional now, so both directions animate identically. */
+html[data-view-transition-kind="theme"]::view-transition-old(root){ z-index:1; }
+html[data-view-transition-kind="theme"]::view-transition-new(root){ z-index:2; }
+
+/* Cursor-spotlight: a soft glow that follows your pointer inside a card,
+   the same trick Linear/Vercel/Stripe use on their marketing pages. Pure
+   CSS reading two variables JS updates on pointermove (see initSpotlight
+   in site.js) — the glow itself never needs JS to render, only to move. */
+.card{ position:relative; isolation:isolate; }
+/* .card sets position:relative for the ::before glow below, but a few
+   elements (the notifications dropdown, the bulk-select action bar,
+   the floating hero chips) are meant to be position:absolute/fixed via
+   Tailwind's .absolute/.fixed classes. Because this file loads after
+   the Tailwind CDN script, .card's position:relative was winning that
+   tie on source order alone, forcing those panels back into normal
+   document flow — which is what was blowing out the header width and
+   causing horizontal scroll on every dashboard page. Two classes beats
+   one on specificity, so this wins regardless of load order. */
+.card.absolute{ position:absolute; }
+.card.fixed{ position:fixed; }
+.card::before{
+  content:""; position:absolute; inset:0; border-radius:inherit; z-index:0;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%), color-mix(in srgb, var(--primary) 12%, transparent), transparent 70%);
+  opacity:0; transition:opacity .35s ease; pointer-events:none;
+}
+.card:hover::before{ opacity:1; }
+.card > *{ position:relative; z-index:1; }
+
+/* Custom scrollbar + text-selection color — small, but it's the kind of
+   detail that makes a site feel designed all the way down instead of
+   stopping at the cards. */
+::selection{ background:color-mix(in srgb, var(--primary) 30%, transparent); color:var(--text); }
+::-webkit-scrollbar{ width:10px; height:10px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{ background:color-mix(in srgb, var(--text-soft) 35%, transparent); border-radius:99px; border:2px solid var(--bg); background-clip:padding-box; }
+::-webkit-scrollbar-thumb:hover{ background:color-mix(in srgb, var(--text-soft) 55%, transparent); background-clip:padding-box; }
+html{ scrollbar-color: color-mix(in srgb, var(--text-soft) 35%, transparent) transparent; scrollbar-width: thin; }
+
+/* Film grain: an almost-subliminal texture over the whole page — the
+   difference between "flat digital" and "considered, cinematic." Applied
+   as a fixed, non-interactive overlay so it costs nothing to lay out. */
+.grain-overlay{
+  position:fixed; inset:0; z-index:999; pointer-events:none; opacity:.035; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce){
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*){ animation-duration:.01s !important; }
+}
+
+/* ---- Pulse's own hero motif: dot grid + centered spotlight ---- */
+.dot-grid{
+  background-image: radial-gradient(var(--border) 1.4px, transparent 1.4px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse 60% 55% at 50% 0%, black 40%, transparent 90%);
+}
+.spotlight{
+  position:absolute;
+  width:70vw; height:60vh;
+  left:50%; top:-10%;
+  transform:translateX(-50%);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--primary) 16%, transparent), transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ==========================================================================
+   "Inside Pulse" homepage preview cards — real motion instead of static
+   gray placeholder blocks: bars grow in like a chart loading, an actual
+   animated sparkline draws itself on the Dashboard/Analytics cards, status
+   badges get a soft "live" pulse, and hovering nudges the bars like a
+   chart re-rendering. Scoped entirely to .preview-grid so nothing else
+   on the page is touched.
+   ========================================================================== */
+.preview-grid .p-4 [class*="rounded-lg"]{
+  transform-origin: bottom center;
+  animation: preview-grow .55s cubic-bezier(.16,.8,.24,1) both;
+  animation-play-state: paused;
+}
+.preview-grid [data-reveal].is-visible .p-4 [class*="rounded-lg"]{ animation-play-state: running; }
+.preview-grid .p-4 > [class*="rounded-lg"]:nth-of-type(1),
+.preview-grid .p-4 > div > [class*="rounded-lg"]:nth-of-type(1){ animation-delay:.05s; }
+.preview-grid .p-4 > [class*="rounded-lg"]:nth-of-type(2),
+.preview-grid .p-4 > div > [class*="rounded-lg"]:nth-of-type(2){ animation-delay:.14s; }
+.preview-grid .p-4 > [class*="rounded-lg"]:nth-of-type(3),
+.preview-grid .p-4 > div > [class*="rounded-lg"]:nth-of-type(3){ animation-delay:.22s; }
+@keyframes preview-grow{ from{ transform:scaleY(.2); opacity:.35; } to{ transform:scaleY(1); opacity:1; } }
+
+/* small round status/avatar dots read as "live" with a slow breathing pulse.
+   Scoped to a real class instead of a broad [class*=rounded-full] match —
+   that used to also catch wide pill badges and browser-chrome traffic-light
+   dots, which looked wrong breathing continuously. */
+.status-dot{ animation: preview-pulse 2.6s ease-in-out infinite; }
+@keyframes preview-pulse{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.55; transform:scale(.92);} }
+
+/* status/code pills (Orders' fulfilled badge, Discounts' code chips): a
+   soft light sweep crosses once on reveal, like the pill just "arrived" */
+.pill-shine{ position:relative; overflow:hidden; }
+.pill-shine::after{
+  content:""; position:absolute; inset:0; transform:translateX(-120%);
+  background:linear-gradient(75deg, transparent, color-mix(in srgb, white 55%, transparent), transparent);
+  animation: pill-shine-sweep 1.8s ease .6s both paused;
+}
+.preview-grid [data-reveal].is-visible .pill-shine::after{ animation-play-state: running; }
+@keyframes pill-shine-sweep{ to{ transform:translateX(120%); } }
+
+/* real chart bars (Online Store preview): each bar grows up from 0 to its
+   real height, staggered left-to-right like a chart rendering its data */
+.chart-bar{ transform-origin:bottom center; animation: chart-bar-grow .6s cubic-bezier(.16,.8,.24,1) both paused; }
+.preview-grid [data-reveal].is-visible .chart-bar{ animation-play-state: running; }
+.chart-bar:nth-child(1){ animation-delay:.04s; } .chart-bar:nth-child(2){ animation-delay:.11s; }
+.chart-bar:nth-child(3){ animation-delay:.18s; } .chart-bar:nth-child(4){ animation-delay:.25s; }
+.chart-bar:nth-child(5){ animation-delay:.32s; }
+@keyframes chart-bar-grow{ from{ transform:scaleY(0); } to{ transform:scaleY(1); } }
+.preview-grid .card-hover:hover .chart-bar{ animation: chart-bar-grow .35s cubic-bezier(.16,.8,.24,1) both; animation-play-state: running; }
+
+/* hovering a card reads like the chart just re-rendered: bars pop up in a
+   quick wave instead of the whole card just tilting */
+.preview-grid .card-hover:hover .p-4 [class*="rounded-lg"]{ animation: preview-grow .4s cubic-bezier(.16,.8,.24,1) both; animation-play-state: running; }
+
+/* the two inline sparkline SVGs on the Dashboard + Analytics cards: the
+   line draws itself in on reveal (stroke-dashoffset), then drifts gently
+   forever after so the "chart" never looks frozen */
+.preview-chart{ position:relative; overflow:hidden; }
+.preview-sparkline{ position:absolute; inset:0; width:100%; height:100%; }
+.preview-sparkline-fill{ fill:color-mix(in srgb, var(--primary) 22%, transparent); opacity:0; animation: sparkline-fill-in .5s ease .5s both paused; }
+.preview-sparkline-line{
+  fill:none; stroke:var(--primary); stroke-width:2; vector-effect:non-scaling-stroke;
+  stroke-dasharray:140; stroke-dashoffset:140;
+  animation: sparkline-draw 1s cubic-bezier(.16,.8,.24,1) .1s both paused, sparkline-drift 3.5s ease-in-out 1.2s infinite paused;
+}
+.preview-sparkline-teal .preview-sparkline-fill{ fill:color-mix(in srgb, var(--teal) 22%, transparent); }
+.preview-sparkline-teal .preview-sparkline-line{ stroke:var(--teal); }
+.preview-grid [data-reveal].is-visible .preview-sparkline-line,
+.preview-grid [data-reveal].is-visible .preview-sparkline-fill{ animation-play-state: running; }
+@keyframes sparkline-draw{ to{ stroke-dashoffset:0; } }
+@keyframes sparkline-fill-in{ to{ opacity:1; } }
+@keyframes sparkline-drift{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-2px);} }
+
+@media (prefers-reduced-motion: reduce){
+  .preview-grid .p-4 [class*="rounded-lg"],
+  .preview-grid .p-4 [class*="rounded-full"],
+  .preview-sparkline-line, .preview-sparkline-fill{ animation:none !important; opacity:1 !important; transform:none !important; stroke-dashoffset:0 !important; }
+}
+
+/* ==========================================================================
+   Homepage stats — 3D glass cards with a colored icon, a breathing glow
+   behind the number, and the existing pointer-tilt system (tilt-layer-1/2
+   give the icon and number real depth/parallax as you move over the card).
+   The numbers themselves count up/down via initStatCounters() in site.js.
+   ========================================================================== */
+.stat-card{ perspective:1400px; }
+.stat-card-inner{
+  position:relative;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:1.75rem 1rem 1.5rem;
+  text-align:center;
+  overflow:hidden;
+  transform-style:preserve-3d;
+  transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .35s ease;
+  box-shadow:var(--shadow);
+}
+.stat-card:hover .stat-card-inner{
+  border-color: color-mix(in srgb, var(--stat-color) 45%, var(--border));
+  box-shadow: 0 20px 45px -14px color-mix(in srgb, var(--stat-color) 40%, transparent);
+}
+.stat-glow{
+  position:absolute; left:50%; bottom:-30%; transform:translateX(-50%);
+  width:130px; height:100px; border-radius:50%;
+  background: radial-gradient(circle, var(--stat-color), transparent 70%);
+  opacity:.22; filter:blur(20px);
+  animation: stat-glow-pulse 3.4s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes stat-glow-pulse{ 0%,100%{ opacity:.16; transform:translateX(-50%) scale(1);} 50%{ opacity:.38; transform:translateX(-50%) scale(1.18);} }
+.stat-icon{
+  position:relative; width:34px; height:34px; margin:0 auto .7rem;
+  border-radius:10px; display:flex; align-items:center; justify-content:center;
+  background: color-mix(in srgb, var(--stat-color) 15%, transparent);
+  color: var(--stat-color); font-size:13px;
+}
+.stat-number{ position:relative; color:var(--stat-color); font-variant-numeric:tabular-nums; }
+
+@media (prefers-reduced-motion: reduce){
+  .status-dot, .pill-shine::after, .chart-bar, .stat-glow{ animation:none !important; }
+  .chart-bar{ transform:none !important; }
+}
+
+/* ==========================================================================
+   ULTRA-RESPONSIVE / MOBILE HARDENING
+   Safe-area support for the iPhone notch/Dynamic Island + home indicator
+   and Android gesture bar, larger touch targets on real touch devices,
+   and a few small cross-device polish fixes. viewport-fit=cover (added to
+   every page's <meta name="viewport">) is what makes env(safe-area-*)
+   return real values instead of 0 on iOS.
+   ========================================================================== */
+
+/* sticky header: padding instead of just relying on top:0, so on a phone
+   held sideways the logo/buttons don't sit under the notch */
+header#site-nav{ padding-top: env(safe-area-inset-top); }
+
+/* the slide-out mobile nav drawer opens from the true left edge — pad it
+   so the close button and "Upgrade" card clear the notch/home-indicator
+   in landscape instead of hugging the curved screen edge */
+#mobile-panel{
+  padding-left: calc(1rem + env(safe-area-inset-left));
+  padding-top: calc(1rem + env(safe-area-inset-top));
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
+/* toasts + the bulk-select action bar float above the content on
+   purpose — keep them above the home indicator / gesture bar instead of
+   letting the OS chrome cover their bottom few pixels */
+#toast-wrap{
+  bottom: calc(1.25rem + env(safe-area-inset-bottom)) !important;
+  right: calc(1.25rem + env(safe-area-inset-right)) !important;
+}
+#bulk-bar{ bottom: calc(1.25rem + env(safe-area-inset-bottom)) !important; }
+.widget-drop-zone{ bottom: calc(18px + env(safe-area-inset-bottom)); }
+
+@media (max-width: 640px){
+  #notif-panel.notif-panel{
+    right: calc(.75rem + env(safe-area-inset-right));
+    left: calc(.75rem + env(safe-area-inset-left));
+    top: calc(4rem + env(safe-area-inset-top));
+  }
+}
+
+/* real touch devices: bump icon-only buttons up toward Apple/Android's
+   ~40-44px minimum recommended tap target. This only *adds* min-height/
+   min-width — it can't shrink anything, and on a mouse+trackpad device
+   (pointer: fine) none of this applies, so desktop stays exactly as
+   compact as it already was. */
+@media (pointer: coarse){
+  button[aria-label], a[aria-label], button.h-7, button.h-8, button.h-9,
+  a.h-7, a.h-8, a.h-9, #cmdk-btn-mobile, #notif-btn, #theme-switch,
+  [data-close-menu], .sidebar-link{
+    min-height:40px; min-width:40px;
+  }
+  .theme-switch{ min-width:0; } /* it's a pill toggle, not a square icon button — don't force it square */
+}
+
+/* belt-and-braces: nothing on the page should ever be wider than the
+   viewport, even a stray unstyled element pasted into a future page */
+img, svg, video, canvas, table{ max-width:100%; }
+
+/* remove the gray flash Android/Chrome shows on tap, and iOS's default
+   tap highlight box, so custom :active/hover states are what's actually
+   seen instead of a system-drawn rectangle over your rounded corners */
+a, button, .card-hover, [role="button"]{ -webkit-tap-highlight-color: transparent; }
+
+/* iOS Safari's momentum scroll + overscroll bounce look better contained
+   to the actual scrollable areas instead of rubber-banding the whole page */
+html, body{ overscroll-behavior-y: none; }
+.overflow-y-auto, #mobile-panel nav{ overscroll-behavior: contain; }

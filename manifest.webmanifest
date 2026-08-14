@@ -1,0 +1,22 @@
+{
+  "name": "Pulse — Analytics Dashboard",
+  "short_name": "Pulse",
+  "description": "Pulse is an analytics dashboard UI: animated charts, instant search, and a sidebar that doesn't get in your way.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F5F6FA",
+  "theme_color": "#4F46E5",
+  "icons": [
+    { "src": "images/icon-72.png", "sizes": "72x72", "type": "image/png", "purpose": "any" },
+    { "src": "images/icon-96.png", "sizes": "96x96", "type": "image/png", "purpose": "any" },
+    { "src": "images/icon-120.png", "sizes": "120x120", "type": "image/png", "purpose": "any" },
+    { "src": "images/icon-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any" },
+    { "src": "images/icon-152.png", "sizes": "152x152", "type": "image/png", "purpose": "any" },
+    { "src": "images/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "images/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "images/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "images/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
